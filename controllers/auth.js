@@ -6,7 +6,7 @@ exports.login = (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
     connection.query(
-        'SELECT * FROM accounts WHERE username = ? AND password = ?',
+        'SELECT * FROM accounts_express WHERE username = ? AND password = ?',
         [username, password],
         (error, results) => {
             if (results.length > 0) {
@@ -14,7 +14,8 @@ exports.login = (req, res) => {
 				req.session.username = username;
 				res.redirect('/');
             } else {
-                res.send('Incorrect password or username');
+                req.flash('error', "Нэвтрэх нэр нууц үг буруу байна");
+                res.redirect('/login');
             }
         }
     );
@@ -23,5 +24,5 @@ exports.login = (req, res) => {
 exports.logout = (req, res) => {
     req.session.loggedin = false;
     req.session.username = null;
-    res.redirect('/');
+    res.redirect('/login');
 }
