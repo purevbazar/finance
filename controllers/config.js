@@ -6,10 +6,9 @@ console.log("I am here");
 exports.index = (req, res) => {
     if (req.session.loggedin) {
         connection.query(
-            'SELECT * FROM accounts ORDER BY id desc',
+            "SELECT *, DATE_FORMAT(created_at,'%Y/%m/%d') as date FROM accounts ORDER BY id desc", 
             (error, results) => {
                 res.render('config/index.ejs', {data: results, verified: req.session.loggedin});
-                console.log(results)
             }
         );
     }
@@ -20,43 +19,58 @@ exports.index = (req, res) => {
 
 exports.add = (req, res) => {
     if (req.session.loggedin) {
-                let number = req.body.accountNumber;
-                let name = req.body.accountName;
-                let currency = req.body.currency;
-                let errors = false;
-                console.log("I am in insert")
-                if(name.length === 0 || number.length === 0) {
-                    errors = true;
-            
-                    // set flash message
-                    req.flash('error', "Мэдээллээ бүрэн бөглөнө үү");
-                    // render to add.ejs with flash message
-                    res.render('config')
+        connection.query(
+            'SELECT * FROM accounts WHERE accountNumber = ?',
+            [req.body.accountNumber],
+            (error, results) => {
+                console.log("Before editing .....")
+                console.log(results.length)
+                if(results.length>=1){
+                    console.log("error");
+                    req.flash('error', 'Энэ данс бүртгэлтэй байна!');
+                    res.redirect('/config');
                 }
-
-                // if no error
-            if(!errors) {
-            
-                var data = {
-                    accountName: name,
-                    accountNumber: number,
-                    currency: currency,
-                    isActive : 1
-                }
-                // insert query
-
-                connection.query(
-                    'INSERT INTO accounts(accountNumber, accountName, currency, isActive) VALUES(?, ?, ?, ?)',
-                    [req.body.accountNumber, req.body.accountName, req.body.currency, 1],
-                    (error, results) => {
-                        console.log(error);
-                        req.flash('success', 'Book successfully added');
-                        res.redirect('/config');
+                else{
+                    let number = req.body.accountNumber;
+                    let name = req.body.accountName;
+                    let currency = req.body.currency;
+                    let errors = false;
+                    console.log("I am in insert")
+                    if(name.length === 0 || number.length === 0) {
+                        errors = true;
+                
+                        // set flash message
+                        req.flash('error', "Мэдээллээ бүрэн бөглөнө үү");
+                        // render to add.ejs with flash message
+                        res.render('config')
                     }
 
-                );
-                
+                        // if no error
+                    if(!errors) {
+                    
+                        var data = {
+                            accountName: name,
+                            accountNumber: number,
+                            currency: currency,
+                            isActive : 1
+                        }
+                        // insert query
+
+                        connection.query(
+                            'INSERT INTO accounts(accountNumber, accountName, currency, isActive) VALUES(?, ?, ?, ?)',
+                            [req.body.accountNumber, req.body.accountName, req.body.currency, 1],
+                            (error, results) => {
+                                console.log(error);
+                                req.flash('success', 'Данс амжилттай нэмэгдлээ');
+                                res.redirect('/config');
+                            }
+
+                        );
+                    }
+                }
             }
+        )
+            
         }
     else{
         res.render('login.ejs', {verified: req.session.loggedin});
@@ -65,50 +79,66 @@ exports.add = (req, res) => {
 
 exports.update = (req, res) => {
     if (req.session.loggedin) {
-                let number = req.body.accountNumber;
-                let name = req.body.accountName;
-                let currency = req.body.currency;
-                let id = req.body.id;
-                let status = 1;
-                let errors = false;
-                console.log(req.body)
-                if(name.length === 0 || number.length === 0) {
-                    errors = true;
-            
-                    // set flash message
-                    req.flash('error', "Мэдээллээ бүрэн бөглөнө үү");
-                    // render to add.ejs with flash message
-                    res.render('config')
+        connection.query(
+            'SELECT * FROM accounts WHERE accountNumber = ?',
+            [req.body.accountNumber],
+            (error, results) => {
+                console.log("Before editing .....")
+                console.log(results.length)
+                if(results.length>1){
+                    console.log("error");
+                    req.flash('error', 'Энэ данс бүртгэлтэй байна!');
+                    res.redirect('/config');
                 }
-
-                if(req.body.switch == null || req.body.switch == undefined){
-                    status = 0;
-                }
-
-                // if no error
-            if(!errors) {
-            
-                var data = {
-                    accountName: name,
-                    accountNumber: number,
-                    currency: currency,
-                    isActive : status
-                }
-                // insert query
-
-                connection.query(
-                    'UPDATE accounts SET accountName = ?, accountNumber = ?, Currency = ?, isActive = ? WHERE id = ?',
-                    [name, number, currency, status, id],
-                    (error, results) => {
-                        console.log(error);
-                        console.log(results)
-                        req.flash('success', 'Book successfully added');
-                        res.redirect('/config');
-                    }
-
-                );
+                else{
+                    let number = req.body.accountNumber;
+                    let name = req.body.accountName;
+                    let currency = req.body.currency;
+                    let id = req.body.id;
+                    let status = "";
+                    let errors = false;
+                   
+                    if(name.length === 0 || number.length === 0) {
+                        errors = true;
                 
+                        // set flash message
+                        req.flash('error', "Мэдээллээ бүрэн бөглөнө үү");
+                        // render to add.ejs with flash message
+                        res.render('config')
+                    }
+    
+                    if(req.body.isActive == "on"){
+                        status = 1;
+                    }
+                    else{
+                        status = 0;
+                    }
+    
+                    // if no error
+                if(!errors) {
+                    var data = {
+                        accountName: name,
+                        accountNumber: number,
+                        currency: currency,
+                        isActive : status
+                    }
+                    // insert query
+                    console.log("I am updating...");
+                    connection.query(
+                        'UPDATE accounts SET accountName = ?, accountNumber = ?, Currency = ?, isActive = ? WHERE id = ?',
+                        [name, number, currency, status, id],
+                        (error, results) => {
+                            req.flash('success', 'Амжилттай засварлалаа');
+                            res.redirect('/config');
+                        }
+    
+                    );
+                    
+                }
+
+                }
             }
+        );
         }
     else{
         res.render('login.ejs', {verified: req.session.loggedin});
@@ -124,8 +154,6 @@ exports.edit = (req, res) => {
             'SELECT * FROM accounts WHERE id = ?',
             [req.params.id],
             (error, results) => {
-                console.log(error)
-                console.log(results)
                 res.render('config/edit.ejs', {data: results, verified: req.session.loggedin});
             }
         );

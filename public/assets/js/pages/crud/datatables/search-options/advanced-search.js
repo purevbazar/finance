@@ -23,21 +23,12 @@ var KTDatatablesSearchOptionsAdvancedSearch = function() {
 			},
 
 			searchDelay: 500,
-			processing: true,
-			serverSide: true,
-			ajax: {
-				url: HOST_URL + '/api//datatables/demos/server.php',
-				type: 'POST',
-				data: {
-					// parameters for custom backend script demo
-					columnsDef: [
-						'RecordID', 'OrderID', 'Country', 'ShipCity', 'CompanyAgent',
-						'ShipDate', 'Status', 'Type', 'Actions',],
-				},
-			},
+			processing: false,
+			serverSide: false,
+			
 			columns: [
-				{data: 'RecordID'},
-				{data: 'OrderID'},
+				{data: '#'},
+				{data: 'Гүйлгээний утга'},
 				{data: 'Country'},
 				{data: 'ShipCity'},
 				{data: 'CompanyAgent'},

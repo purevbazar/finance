@@ -134,20 +134,13 @@ License: You must have a valid license purchased only from themeforest(the above
 								</div>
 								<div class="form-group">
 									<label>Данс идэвхтэй эсэх</label>
-									<div class="form-group row">
-										<input type="checkbox" checked data-toggle="toggle">
+									<div class="form-group">
+										<input type="checkbox" data-toggle="toggle" name="isActive" <%= (data[0].isActive == "1")?'checked':'' %>>
 									</div>
-									<span class="switch switch-outline switch-icon switch-success">
-										<label>
-											<input type="checkbox" checked="checked" name="switch" id="switch" value="<%= data[0].isActive%>">
-											<span></span>
-										</label>
-									</span>
 								</div>
 								<!--begin: Code-->
 								<div class="example-code mt-10">
 									<div class="example-highlight">
-										
 									</div>
 								</div>
 								<!--end: Code-->

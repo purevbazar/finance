@@ -131,7 +131,11 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
         <script src="assets/js/pages/widgets.js"></script>
-       
+		<script>
+			$("a[href*='/']").addClass('active')
+        	$("a[href*='config']").removeClass('active')
+
+		</script>
 		<!--end::Page Scripts-->
 	</body>
 	<!--end::Body-->

@@ -51,15 +51,18 @@ var KTBootstrapDatepicker = function () {
 
         // enable clear button 
         $('#kt_datepicker_3, #kt_datepicker_3_validate').datepicker({
+            autoclose: true,
+            dateFormat: 'yy-mm-dd',
             rtl: KTUtil.isRTL(),
             todayBtn: "linked",
-            clearBtn: true,
+            clearBtn: false,
             todayHighlight: true,
             templates: arrows
         });
 
         // enable clear button for modal demo
         $('#kt_datepicker_3_modal').datepicker({
+            dateFormat: 'yy-mm-dd',
             rtl: KTUtil.isRTL(),
             todayBtn: "linked",
             clearBtn: true,
