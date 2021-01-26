@@ -9,6 +9,8 @@ router.get('/', indexController.index);
 
 router.post('/add', indexController.add);
 
+router.post('/addType', indexController.addType);
+
 router.get('/edit/:id', indexController.edit);
 
 router.post('/update', indexController.update);

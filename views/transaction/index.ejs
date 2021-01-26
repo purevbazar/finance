@@ -96,8 +96,7 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="card card-custom">
                             <div class="card-header flex-wrap py-5">
                                 <div class="card-title">
-                                    <h3 class="card-label">Column Rendering
-                                    <div class="text-muted pt-2 font-size-sm">custom colu rendering</div></h3>
+                                    <h3 class="card-label">Гүйлгээ бүртгэх
                                 </div>
                                 <div class="card-toolbar">
                                     <!--begin::Dropdown-->
@@ -219,19 +218,19 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Шинэ данс нэмэх</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Гүйлгээ бүртгэх</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <i aria-hidden="true" class="ki ki-close"></i>
                                     </button>
                                 </div>
-                                <form action="/config/add" method="post">
+                                <form action="/transaction/add" method="post">
                                 <div class="modal-body">
                                     <div class="form-group">
                                         <label>Данс сонгох</label>
-                                        <select class="form-control form-control-solid"  name="currency">
-                                            <option value="mnt">Төгрөг</option>
-                                            <option value="usd">Доллар</option>
-                                            <option value="cny">Юан</option>
+                                        <select class="form-control form-control-solid"  name="account">
+                                            <% for(var i = 0; i< accounts.length; i++) { %>
+                                             <option value="<%= accounts[i].id %>"><%= accounts[i].bank %> - <%= accounts[i].accountNumber %> - <%= accounts[i].accountName %></option>
+                                            <% } %>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -243,7 +242,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                             <div class="col-sm-6">
                                                 <label>Огноо</label>
                                                 <div class="input-group date">
-                                                    <input type="text" class="form-control" readonly="readonly"  id="kt_datepicker_3" data-date-format='yyyy-mm-dd'/>
+                                                    <input type="text" class="form-control" readonly="readonly" name="date" id="kt_datepicker_3" data-date-format='yyyy-mm-dd'/>
                                                     <div class="input-group-append">
                                                         <span class="input-group-text">
                                                             <i class="la la-calendar"></i>
@@ -254,32 +253,29 @@ License: You must have a valid license purchased only from themeforest(the above
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label>Төрөл</label>
-                                                <div class="form-group">
-                                                    <input type="checkbox"  data-toggle="toggle" data-on="Орлого" data-off="Зарлага" data-onstyle="success" data-offstyle="danger" data-width="90" name="type" id="type">
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label>Валют</label>
-                                                <div class="form-group">
-                                                    <input type="checkbox"  data-toggle="toggle" data-on="Доллар" data-off="Төгрөг" data-onstyle="success" data-offstyle="primary" data-width="90" name="currency" id="currency">
-                                                </div>
-                                            </div>
+                                        <label class="col-form-label">Гүйлгээний төрөл</label>
+                                        <div>
+                                            <select class="form-control select2" id="kt_select2_2" name="param" style="width: 100%" name="type">
+                                                <optgroup label="Зарлага">
+                                                    <% for(var i = 0; i< types.length; i++) { %>
+                                                       <% if (types[i].type==0) { %>  
+                                                         <option value="<%= types[i].id %>"><%= types[i].name %></option>
+                                                        <% } %>
+                                                    <% } %>
+                                                </optgroup>
+                                                <optgroup label="Орлого">
+                                                <% for(var i = 0; i< types.length; i++) { %>
+                                                   <% if (types[i].type==1) { %>  
+                                                     <option value="<%= types[i].id %>"><%= types[i].name %></option>
+                                                    <% } %>
+                                                <% } %>
+                                                </optgroup>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>Гүйлгээний төрөл сонгох</label>
-                                        <select class="form-control form-control-solid"  name="currency">
-                                            <option value="mnt">Төгрөг</option>
-                                            <option value="usd">Доллар</option>
-                                            <option value="cny">Юан</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
                                         <label>Тайлбар</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="description"></textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
@@ -342,9 +338,23 @@ License: You must have a valid license purchased only from themeforest(the above
 
         <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-        
+        <script src="assets/js/pages/crud/forms/widgets/select2.js"></script>
         <script>
+        
+        $("#submits").click(function(){
+            if ($('#amount').val().length == 0){
+                $("#amount").addClass('is-invalid')
+                if(!$("#typeError").length){
+                    $("#amount").after('<div class="invalid-feedback" id="typeError">Дансны нэр хоосон байна.</div>')
+                }
+                return false;
+            }
+        })
 
+        $("#close").click(function(){
+            $('#typeError').remove()
+            $('#amount').removeClass('is-invalid');
+        })  
         
         $("a[href*='/']").removeClass('active')
         $("a[href*='transaction']").addClass('active')
@@ -359,6 +369,7 @@ License: You must have a valid license purchased only from themeforest(the above
         function digit(){
             $('#amount').mask('000,000,000', {reverse: true});
         }
+
         </script>
        
 		<!--end::Page Scripts-->
