@@ -7,4 +7,6 @@ const indexController = require('../controllers/transaction')
 // indexing methods
 router.get('/', indexController.index);
 
+router.post('/add', indexController.add);
+
 module.exports = router
