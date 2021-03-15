@@ -117,14 +117,14 @@ var KTApexChartsDemo = function () {
 		const apexChart = "#chart_3";
 		var options = {
 			series: [{
-				name: 'Net Profit',
-				data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+				name: 'AWS Consulting',
+				data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 89, 90]
 			}, {
-				name: 'Revenue',
-				data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+				name: 'ICS',
+				data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 100, 100]
 			}, {
-				name: 'Free Cash Flow',
-				data: [35, 41, 36, 26, 45, 48, 52, 53, 41]
+				name: 'FIBOSTACK',
+				data: [35, 41, 36, 26, 45, 48, 52, 53, 41, 100, 100]
 			}],
 			chart: {
 				type: 'bar',
@@ -146,11 +146,11 @@ var KTApexChartsDemo = function () {
 				colors: ['transparent']
 			},
 			xaxis: {
-				categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+				categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
 			},
 			yaxis: {
 				title: {
-					text: '$ (thousands)'
+					text: '₮ төгрөгөөр'
 				}
 			},
 			fill: {
@@ -164,77 +164,6 @@ var KTApexChartsDemo = function () {
 				}
 			},
 			colors: [primary, success, warning]
-		};
-
-		var chart = new ApexCharts(document.querySelector(apexChart), options);
-		chart.render();
-	}
-
-	var _demo4 = function () {
-		const apexChart = "#chart_4";
-		var options = {
-			series: [{
-				name: 'Marine Sprite',
-				data: [44, 55, 41, 37, 22, 43, 21]
-			}, {
-				name: 'Striking Calf',
-				data: [53, 32, 33, 52, 13, 43, 32]
-			}, {
-				name: 'Tank Picture',
-				data: [12, 17, 11, 9, 15, 11, 20]
-			}, {
-				name: 'Bucket Slope',
-				data: [9, 7, 5, 8, 6, 9, 4]
-			}, {
-				name: 'Reborn Kid',
-				data: [25, 12, 19, 32, 25, 24, 10]
-			}],
-			chart: {
-				type: 'bar',
-				height: 350,
-				stacked: true,
-			},
-			plotOptions: {
-				bar: {
-					horizontal: true,
-				},
-			},
-			stroke: {
-				width: 1,
-				colors: ['#fff']
-			},
-			title: {
-				text: 'Fiction Books Sales'
-			},
-			xaxis: {
-				categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
-				labels: {
-					formatter: function (val) {
-						return val + "K"
-					}
-				}
-			},
-			yaxis: {
-				title: {
-					text: undefined
-				},
-			},
-			tooltip: {
-				y: {
-					formatter: function (val) {
-						return val + "K"
-					}
-				}
-			},
-			fill: {
-				opacity: 1
-			},
-			legend: {
-				position: 'top',
-				horizontalAlign: 'left',
-				offsetX: 40
-			},
-			colors: [primary, success, warning, danger, info]
 		};
 
 		var chart = new ApexCharts(document.querySelector(apexChart), options);

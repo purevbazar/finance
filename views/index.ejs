@@ -89,29 +89,105 @@ License: You must have a valid license purchased only from themeforest(the above
 				<!--end::Aside-->
 				<!--begin::Wrapper-->
 				<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
-          
+					<!--begin::Content-->
+					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+						<!--begin::Entry-->
+						<div class="d-flex flex-column-fluid">
+							<!--begin::Container-->
+							<div class="container-fluid">
+								<!--begin::Row-->
+								<div class="row">
+									<div hidden>
+										<input type="text" id="mask">
+										<% for(var i = 0; i< transaction.length; i++) { %>
+											<input type="text" name="<%= transaction[i].month %>" value="<%= transaction[i].income %>"> 
+											<input type="text" name="<%= transaction[i].month %>" value="<%= transaction[i].expense %>"> 
+										<% } %>
+									</div>
+									<div class="col-xl-6">
+										<!--begin::Charts Widget 1-->
+										<div class="card card-custom card-stretch gutter-b">
+											<!--begin::Header-->
+											<div class="card-header h-auto border-0">
+												<!--begin::Title-->
+												<div class="card-title py-5">
+													<h3 class="card-label">
+														<span class="d-block text-dark font-weight-bolder">Ерөнхий</span>
+													</h3>
+												</div>
+											</div>
+											<!--end::Header-->
+											<!--begin::Body-->
+											<div class="card-body">
+												<!--begin::Chart-->
+												<div id="kt_charts_widget_1_chart"></div>
+												<!--end::Chart-->
+											</div>
+											<!--end::Body-->
+										</div>
+										<!--end::Charts Widget 1-->
+									</div>
+									<div class="col-xl-6">
+										<!--begin::Card-->
+										<div class="card card-custom gutter-b">
+											<div class="card-header">
+												<div class="card-title">
+													<h3 class="card-label text-dark font-weight-bolder">Зарлага</h3>
+												</div>
+											</div>
+											<div class="card-body">
+												<!--begin::Chart-->
+												<div id="chart_4"></div>
+												<!--end::Chart-->
+											</div>
+										</div>
+										<!--end::Card-->
+									</div>
+								</div>
+							</div>
+							<!--end::Container-->
+						</div>
+						<!--end::Entry-->
+					</div>
+					
 				</div>
 				<!--end::Wrapper-->
+				<!--begin::Aside Secondary-->
+				<div class="sidebar sidebar-right d-flex flex-row-auto flex-column" id="kt_sidebar">
+					<!--begin::Aside Secondary Content-->
+					<div class="sidebar-content flex-column-fluid pb-10 pt-9 px-5 px-lg-10">
+						<!--begin::Stats Widget 13-->
+						<div  class="card card-custom bg-danger bg-hover-state-danger card-shadowless gutter-b">
+							<!--begin::Body-->
+							<div class="card-body">
+								<div class="text-inverse-danger font-weight-bolder font-size-h5 mb-2 mt-5">Сарын дундаж burn rate</div>
+								<div class="font-weight-bold text-inverse-danger font-size-h1" id="avgExpense">₮20,000,000</div>
+							</div>
+							<!--end::Body-->
+						</div>
+						<!--begin::Stats Widget 13-->
+						<div class="card card-custom bg-success bg-hover-state-success card-shadowless gutter-b">
+							<!--begin::Body-->
+							<div class="card-body">
+								<div class="text-inverse-danger font-weight-bolder font-size-h5 mb-2 mt-5">Сарын дундаж revenue</div>
+								<div class="font-weight-bold text-inverse-danger font-size-h1" id="avgIncome">₮28,000,000</div>
+							</div>
+							<!--end::Body-->
+						</div>
+						<div class="flex-grow-1 bg-info p-8 rounded-xl flex-grow-1 bgi-no-repeat" style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 70%; background-image: url(assets/media/svg/humans/custom-3.svg)">
+							<h4 class="text-inverse-danger mt-2 font-weight-bolder">Санхүүгийн төлөвлөгөө</h4>
+							<p class="text-inverse-danger my-6">Улирлын борлуулалтын 
+							<br />төлөвлөгөөг өөрчлөх</p>
+							<a href="#" class="btn btn-warning font-weight-bold py-2 px-6">Өөрчлөх</a>
+						</div>
+					</div>
+					<!--end::Aside Secondary Content-->
+				</div>
+				<!--end::Aside Secondary-->
 			</div>
 			<!--end::Page-->
 		</div>
 		<!--end::Main-->
-	
-		<!--begin::Quick Actions Panel-->
-		<div id="kt_quick_actions" class="offcanvas offcanvas-left p-10">
-			<!--begin::Header-->
-			<div class="offcanvas-header d-flex align-items-center justify-content-between pb-10">
-				<h3 class="font-weight-bold m-0">Quick Actions
-				<small class="text-muted font-size-sm ml-2">finance &amp; reports</small></h3>
-				<a href="#" class="btn btn-xs btn-icon btn-light btn-hover-primary" id="kt_quick_actions_close">
-					<i class="ki ki-close icon-xs text-muted"></i>
-				</a>
-			</div>
-			<!--end::Header-->
-		
-		</div>
-	
-		
 	
 
 		<!--end::Demo Panel-->
@@ -131,10 +207,257 @@ License: You must have a valid license purchased only from themeforest(the above
 		<!--end::Page Vendors-->
 		<!--begin::Page Scripts(used by this page)-->
         <script src="assets/js/pages/widgets.js"></script>
+
+		<script src="assets/js/pages/features/charts/apexcharts.js"></script>
 		<script>
 			$("a[href*='/']").addClass('active')
         	$("a[href*='config']").removeClass('active')
+			$("a[href*='transaction']").removeClass('active')
+			$("a[href*='report']").removeClass('active')
 
+		</script>
+		
+		<script>
+			// Charts widgets
+		
+			var _initChartsWidget1 = function () {
+			var element = document.getElementById("kt_charts_widget_1_chart");
+			if (!element) {
+				return;
+			}
+			let incomeArray = new Array(); 
+			for (var i = 0; i <= 12; i++){
+				 if($("input[name=" + i + "]")[0]){
+					incomeArray[i] = $("input[name=" + i+ "]")[0].value;
+				 }
+				 else{
+					incomeArray[i] = 0;
+				 }
+			}
+
+			var totalIncome = 0;
+			var countIncome = 0;
+			for(var i = 0; i < incomeArray.length; i++) {
+				if(incomeArray[i]!=0){
+					totalIncome += parseInt(incomeArray[i]);
+					countIncome++
+				}
+			}
+			var avgIncome = totalIncome / countIncome;
+			
+			$("#avgIncome").text(~~avgIncome);
+			$("#avgIncome").mask('000,000,000,000', {reverse: true})
+			
+			incomeArray.shift();
+			let expenseArray = new Array(); 
+			for (var i = 0; i <= 12; i++){
+				 if($("input[name=" + i + "]")[1]){
+					expenseArray[i] = $("input[name=" + i + "]")[1].value;
+				 }
+				 else{
+					expenseArray[i] = 0;
+				 }
+			}
+			expenseArray.shift();
+			var totalExpense = 0;
+			var countExpense = 0;
+			for(var i = 0; i < expenseArray.length; i++) {
+				if(expenseArray[i]!=0){
+					totalExpense += parseInt(expenseArray[i]);
+					countExpense++
+				}
+			}
+			var avgExpense = totalExpense / countExpense;
+
+			$("#avgExpense").text(~~avgExpense);
+			$("#avgExpense").mask('000,000,000,000', {reverse: true})
+
+			var options = {
+				series: [{
+					name: 'Орлого',
+					data: incomeArray
+				}, {
+					name: 'Зарлага',
+					data: expenseArray
+				}],
+				chart: {
+					type: 'bar',
+					height: 350,
+					toolbar: {
+						show: false
+					}
+				},
+				plotOptions: {
+					bar: {
+						horizontal: false,
+						columnWidth: ['30%'],
+						endingShape: 'rounded'
+					},
+				},
+				legend: {
+					show: false
+				},
+				dataLabels: {
+					enabled: false
+				},
+				stroke: {
+					show: true,
+					width: 2,
+					colors: ['transparent']
+				},
+				xaxis: {
+					categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+					axisBorder: {
+						show: false,
+					},
+					axisTicks: {
+						show: false
+					},
+					labels: {
+						style: {
+							colors: KTApp.getSettings()['colors']['gray']['gray-500'],
+							fontSize: '12px',
+							fontFamily: KTApp.getSettings()['font-family']
+						}
+					}
+				},
+				yaxis: {
+					labels: {
+						style: {
+							colors: KTApp.getSettings()['colors']['gray']['gray-500'],
+							fontSize: '12px',
+							fontFamily: KTApp.getSettings()['font-family']
+						}
+					}
+				},
+				fill: {
+					opacity: 1
+				},
+				states: {
+					normal: {
+						filter: {
+							type: 'none',
+							value: 0
+						}
+					},
+					hover: {
+						filter: {
+							type: 'none',
+							value: 0
+						}
+					},
+					active: {
+						allowMultipleDataPointsSelection: false,
+						filter: {
+							type: 'none',
+							value: 0
+						}
+					}
+				},
+				tooltip: {
+					style: {
+						fontSize: '12px',
+						fontFamily: KTApp.getSettings()['font-family']
+					},
+					y: {
+						formatter: function (val) {
+							$("#mask").val(val);
+							$("#mask").mask('000,000,000,000', {reverse: true})
+							$("#mask").mask('000,000,000,000', {reverse: false})
+							$("#mask").mask('000,000,000,000', {reverse: true})
+							let value = $("#mask").val();
+							return "₮" + value + " төгрөг"
+						}
+					}
+				},
+				colors: [KTApp.getSettings()['colors']['theme']['base']['success'], KTApp.getSettings()['colors']['theme']['base']['danger']],
+				grid: {
+					borderColor: KTApp.getSettings()['colors']['gray']['gray-200'],
+					strokeDashArray: 4,
+					yaxis: {
+						lines: {
+							show: true
+						}
+					}
+				}
+			};
+
+			var chart = new ApexCharts(element, options);
+			chart.render();
+		}
+
+		var _demo4 = function () {
+
+			
+		const apexChart = "#chart_4";
+		var options = {
+			series: [{
+				name: 'Цалин',
+				data: [44, 55, 41, 37, 22, 43, 21]
+			}, {
+				name: 'Striking Calf',
+				data: [53, 32, 33, 52, 13, 43, 32]
+			}, {
+				name: 'Tank Picture',
+				data: [12, 17, 11, 9, 15, 11, 20]
+			}, {
+				name: 'Bucket Slope',
+				data: [9, 7, 5, 8, 6, 9, 4]
+			}, {
+				name: 'Reborn Kid',
+				data: [25, 12, 19, 32, 25, 24, 10]
+			}],
+			chart: {
+				type: 'bar',
+				height: 350,
+				stacked: true,
+			},
+			plotOptions: {
+				bar: {
+					horizontal: true,
+				},
+			},
+			stroke: {
+				width: 1,
+				colors: ['#fff']
+			},
+			title: {
+				text: 'Зарлагын задаргаа'
+			},
+			xaxis: {
+				categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+				labels: {
+					formatter: function (val) {
+						return val + "K"
+					}
+				}
+			},
+			yaxis: {
+				title: {
+					text: undefined
+				},
+			},
+			tooltip: {
+				y: {
+					formatter: function (val) {
+						return val + "K"
+					}
+				}
+			},
+			fill: {
+				opacity: 1
+			},
+			legend: {
+				position: 'top',
+				horizontalAlign: 'left',
+				offsetX: 40
+			},
+			colors: [primary, success, warning, danger, info]
+		};
+
+		var chart = new ApexCharts(document.querySelector(apexChart), options);
+		chart.render();
+	}
 		</script>
 		<!--end::Page Scripts-->
 	</body>

@@ -16,6 +16,7 @@ exports.index = (req, res) => {
                                 "SELECT *,  DATE_FORMAT(transaction_date,'%Y/%m/%d') as date FROM transaction ORDER BY transaction_date DESC",
                                 (error, transactions) => {
                                     if(error==null){
+                                        console.log(accounts)
                                         res.render('transaction/index.ejs', {accounts: accounts, types: types, transactions: transactions, verified: req.session.loggedin});
                                     } 
                                 }

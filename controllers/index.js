@@ -5,9 +5,10 @@ const truncate = require('truncate');
 // index page
 exports.index = (req, res) => {
     connection.query(
-        'SELECT * FROM posts',
-        (error, results) => {
-            res.render('index.ejs', {posts: results, verified: req.session.loggedin, Truncate: truncate});
+        'select extract(MONTH from transaction_date) as month, sum(CASE WHEN income = 1 THEN transaction_amount ELSE 0 END) as income , sum(CASE WHEN income = 0 THEN transaction_amount ELSE 0 END) as expense from transaction group by month',
+        (error, transaction) => {
+            console.log(transaction)
+            res.render('index.ejs', {transaction: transaction, verified: req.session.loggedin, Truncate: truncate});
         }
     );
 }
