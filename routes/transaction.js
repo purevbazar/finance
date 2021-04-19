@@ -9,4 +9,8 @@ router.get('/', indexController.index);
 
 router.post('/add', indexController.add);
 
+router.get('/edit/:id', indexController.edit);
+
+router.post('/editTransaction', indexController.editTransaction);
+
 module.exports = router

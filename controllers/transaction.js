@@ -16,7 +16,6 @@ exports.index = (req, res) => {
                                 "SELECT *,  DATE_FORMAT(transaction_date,'%Y/%m/%d') as date FROM transaction ORDER BY transaction_date DESC",
                                 (error, transactions) => {
                                     if(error==null){
-                                        console.log(accounts)
                                         res.render('transaction/index.ejs', {accounts: accounts, types: types, transactions: transactions, verified: req.session.loggedin});
                                     } 
                                 }
@@ -79,6 +78,74 @@ exports.add = (req, res) => {
                         }
                     );
                 } 
+            }
+        );
+    }  
+    else{
+        res.render('login.ejs', {verified: req.session.loggedin});
+    }
+}
+
+// admin edit blog post
+exports.edit = (req, res) => {
+    if (req.session.loggedin) {
+        connection.query(
+            "SELECT *, DATE_FORMAT(transaction_date,'%Y-%m-%d') as date FROM transaction WHERE id = ?",
+            [req.params.id],
+            (error, results) => {
+                connection.query(
+                    'SELECT * FROM transaction_type',
+                    (error, types) => {
+                        if(results.length!=0 && types !=0){
+                            connection.query(
+                                "SELECT * FROM accounts WHERE isActive = 1",
+                                (error, accounts) => {
+                                    if(error==null){
+                                        res.render('transaction/editTransaction.ejs', {data: results, accounts: accounts, types: types, verified: req.session.loggedin});
+                                    } 
+                                }
+                            );
+                           
+                        } else{
+                            req.flash('error', 'Та эхлээд данс болон гүйлгээний утгуудаа бүрэн тохируулна уу!');
+                            res.render('config/index.ejs', {data: accounts, typeData:types, verified: req.session.loggedin});
+                        }
+                        
+                    }
+                );
+            }
+        );
+    }
+}
+
+
+exports.editTransaction = (req, res) => {
+    if (req.session.loggedin) {
+        let account = req.body.account;
+        let amount = req.body.amount.replace(/,/g, "");
+        let date = req.body.date;
+        let type = req.body.type;
+        let description= req.body.description;
+        let username = req.session.username;
+        let currency = req.body.currency;
+        let cash = req.body.cash;
+        let id = req.body.id;
+   
+        connection.query(
+            'UPDATE transaction SET transaction_account = ?, transaction_amount = ?, transaction_date = ?, transaction_type = ?, transaction_description = ?, transaction_username = ?, transaction_currency = ?, transaction_cash = ? WHERE id = ?',
+            [account, amount, date, type, description, username, currency, cash, id],
+            (error, results) => {
+                console.log(results);
+                console.log(error);
+                if(results!=undefined){
+                    req.flash('success', 'Амжилттай засварлалаа');
+                    res.redirect('/transaction');
+                }
+                else{
+                    req.flash('error', 'Засварлахад алдаа гарлаа');
+                    res.redirect('/transaction');
+                }
+               
             }
         );
     }  

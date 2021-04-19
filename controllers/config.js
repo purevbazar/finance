@@ -233,15 +233,76 @@ exports.update = (req, res) => {
     }
 }
 
+exports.updateType = (req, res) => {
+    if (req.session.loggedin) {
+        let name = req.body.name;
+        let description = req.body.description;
+        let id = req.body.id;
+        let type = "";
+        let constant = "";
+        let errors = false;
+       
+        if(name.length === 0) {
+            errors = true;
+            // set flash message
+            req.flash('error', "Мэдээллээ бүрэн бөглөнө үү");
+            // render to add.ejs with flash message
+            res.render('config')
+        }
+
+        if(req.body.type == "on"){
+            type = 1;
+        }
+        else{
+            type = 0;
+        }
+        
+        if(req.body.constant == "on"){
+            constant = 1;
+        }
+        else{
+            constant = 0;
+        }
+
+        // if no error
+        if(!errors) {
+            connection.query(
+                'UPDATE transaction_type SET name = ?, description = ?, type = ?, constant = ? WHERE id = ?',
+                [name, description, type, constant, id],
+                (error, results) => {
+                    req.flash('success', 'Амжилттай засварлалаа');
+                    res.redirect('/config');
+                }
+            );
+        }
+        }
+    else{
+        res.render('login.ejs', {verified: req.session.loggedin});
+    }
+}
+
+
 // admin edit blog post
 exports.edit = (req, res) => {
-    console.log("i am in edit")
     if (req.session.loggedin) {
         connection.query(
             'SELECT * FROM accounts WHERE id = ?',
             [req.params.id],
             (error, results) => {
                 res.render('config/edit.ejs', {data: results, verified: req.session.loggedin});
+            }
+        );
+    }
+}
+
+// admin edit blog post
+exports.editType = (req, res) => {
+    if (req.session.loggedin) {
+        connection.query(
+            'SELECT * FROM transaction_type WHERE id = ?',
+            [req.params.id],
+            (error, results) => {
+                res.render('config/editType.ejs', {data: results, verified: req.session.loggedin});
             }
         );
     }

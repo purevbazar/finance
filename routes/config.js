@@ -13,6 +13,10 @@ router.post('/addType', indexController.addType);
 
 router.get('/edit/:id', indexController.edit);
 
+router.get('/editType/:id', indexController.editType);
+
 router.post('/update', indexController.update);
+
+router.post('/updateType', indexController.updateType);
 
 module.exports = router
