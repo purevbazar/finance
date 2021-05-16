@@ -1,24 +1,24 @@
-# [1] This is a blog written in mysql and nodejs express framework
-a simple blog using nodejs express and mysql
+# MICRO FINANCE WEB APP FOR STARTUP METRICS
 
-## Requirements :
-- Mysql database
-- Nodejs
+👋 Сайн байна уу, мэдээллийн технологийн салбарын гарааны бизнес эрхлэгчдэд зориулсан санхүүгийн платформ хөгжүүлэх төслөөс уг вэб аппыг хөгжүүлэн эхний хувилбарыг тавьж байна. Уг вэб нь гарааны бизнесүүдийн хөрөнгө оруулалт татах, өөрсдийгөө хэмжихэд хамгийн чухал үзүүлэлтүүд болох MRR, LTV, Burn Rate, CAC дөрвөн үзүүлэлтүүдийг хэмжихэд чиглүүлж энгийн байдлаар хийхэд чиглэсэн болно. 
 
-## Custom Versions ?
-- [expressjs-sqlite-blog](https://github.com/JustPowerful/expressjs-sqlite-blog)
+## Суулгах - Installation
 
-## How to use ?
-- First you need to change the sql database informations in `/config/database.json`
+Үндсэн кодыг татаж аваад package.json доторх dependencies file уудыг ажиллуулна. 
 
-![sql-info](https://www.mediafire.com/convkey/a4a9/qki7ar2a6lz0q9zzg.jpg)
+```bash
+npm install
+```
 
-- Change the session secret in `/config/session.json`
+## Мэдээллийн сан - Database
 
-- Import the sql files from the `SQL` folder after creating a database
+Мэдээллийн сангийн бүтэц нь SQL гэсэн бүтэц дотор байрших бөгөөд RDBMS бүтэцтэй сан дээр ажиллуулна.
 
-![sql-files](http://www.mediafire.com/convkey/9c59/blt0vp9ipiexduczg.jpg)
 
-![sql-import](http://www.mediafire.com/convkey/56d9/01o11v80j8ftqbuzg.jpg)
+## Цаашид хамтран хөгжүүлэх - Contributing
+Pull requests хүлээн авахад бэлэн гэдгээс гадна томоохон өөрчлөлт оруулах бол Issue үүсгэн эхлээд ярилцах боломжтой байна. 
 
-- Now you can launch the `app.js` using node
+Open source төслүүд цаашид маш олон болох болтугай ❤️
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
