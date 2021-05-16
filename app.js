@@ -27,6 +27,8 @@ let authRouter = require('./routes/auth')
 let profileRouter = require('./routes/profile')
 let configRouter = require('./routes/config');
 let transactionRouter = require('./routes/transaction');
+let msRouter = require('./routes/marketingsales');
+let reportRouter = require('./routes/report');
 
 
 app.use('/', router) // index router {index, login, register pages}
@@ -34,6 +36,8 @@ app.use('/auth', authRouter) // auth router
 app.use('/profile', profileRouter) // profile router
 app.use('/config', configRouter)
 app.use('/transaction', transactionRouter)
+app.use('/marketingsales', msRouter)
+app.use('/report', reportRouter)
 
 
 app.listen(process.env.PORT || 3000);
