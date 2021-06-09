@@ -4,17 +4,21 @@ const truncate = require('truncate');
 
 // index page
 exports.index = (req, res) => {
-    connection.query(
-        'select extract(MONTH from transaction_date) as month, sum(CASE WHEN income = 1 THEN transaction_amount ELSE 0 END) as income , sum(CASE WHEN income = 0 THEN transaction_amount ELSE 0 END) as expense from transaction group by month',
-        (error, transaction) => {
-            if(error==null){
-                res.render('index.ejs', {transaction: transaction, verified: req.session.loggedin, Truncate: truncate});
+    if (req.session.loggedin){
+        connection.query(
+            'select extract(MONTH from transaction_date) as month, sum(CASE WHEN income = 1 THEN transaction_amount ELSE 0 END) as income , sum(CASE WHEN income = 0 THEN transaction_amount ELSE 0 END) as expense from transaction group by month',
+            (error, transaction) => {
+                if(error==null){
+                    res.render('index.ejs', {transaction: transaction, verified: req.session.loggedin, Truncate: truncate});
+                }
+                else{
+                    console.log(error);
+                }
             }
-            else{
-                console.log(error);
-            }
-        }
-    );
+        );
+    } else {
+        res.render('login.ejs', {verified: req.session.loggedin});
+    }
 }
 
 // login and register
